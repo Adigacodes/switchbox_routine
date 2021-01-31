@@ -1,0 +1,241 @@
+#include<iostream>
+#include<fstream>
+using namespace std;
+
+// class myexception:public exception     NOT WORKING my exceptions
+// {
+// private:
+//     /* data */
+// public:
+//     string invalidpin()
+//     {
+//         return "\nInvalid Pin number\n";
+//     }
+//     string Underflow()
+//     {
+//         return "\nStack underflow cant pop anymore\n";
+//     }
+//     bool is_empty()
+//     {
+//         return true;
+//     }
+// };
+
+template<class T>
+class stack
+{
+protected:
+    struct node
+    {
+        T data;
+        struct node *next;
+    };
+    struct node*top;
+    
+public:
+    stack(){
+        top=NULL;
+    }
+    void push(T val);
+    void pop();
+    T peek();
+    bool empty();
+    void display();
+};
+template<class T>
+void stack<T>::push(T val){
+    struct node*newnode;
+    newnode=(struct node*)malloc(sizeof(struct node));
+    newnode->data=val;
+    newnode->next=top;
+    top=newnode;
+}
+template<class T>
+void stack<T>::pop(){
+    struct node*temp;
+    temp=top;
+    top=top->next;
+    delete(temp);
+}
+template<class T>
+T stack<T>::peek(){
+    if(top==NULL)
+    {
+       cout<<"UNDERFLOW\n";
+    }
+    else
+    {
+        return top->data;
+    }
+    
+}
+template<class T>
+bool stack<T>::empty(){
+    if(top==NULL)
+    {
+       return true;
+    }
+    else
+    {
+        return false;
+    }
+    
+}
+template<class T>
+void stack<T>::display(){
+    ofstream fpout;
+    fpout.open("box.txt",ios::app);
+
+    if(top==NULL)
+    {
+    // cout<<"THE STACK IS -------------  EMPTY\n";
+    fpout<<"\nTHE STACK IS -------------  EMPTY\n";
+
+
+    }
+    else
+    {
+        struct node *temp;
+    temp=top;
+    // cout<<"THE STACK IS --------------\t";
+    fpout<<"THE STACK IS --------------\t";
+
+    while(temp!=NULL)
+    {
+        // cout<<"<="<<(temp->data)+1;
+        fpout<<"<="<<(temp->data)+1;
+
+        temp=temp->next;
+    }
+    cout<<endl;
+    }
+    fpout.close();
+}
+template<class T>
+class sbox:public stack<T>
+{
+private:
+    string name;
+    string address;
+    string phone;
+    string status;
+public:
+    sbox(){
+        name="N/A";
+        address="N/A";
+        phone="N/A";
+        status="N/A";
+    }
+    void setdata()
+    {
+        cout<<"\nENTER YOUR NAME: ";cin>>name;
+        cout<<"\nENTER YOUR ADDRESS: ";cin>>address;
+        cout<<"\nENTER YOUR PHONE: ";cin>>phone;
+
+    }
+    void storedata()
+    {
+        ofstream fout;
+        fout.open("box_user.txt",ios::out);
+        fout<<name<<"\n"<<phone<<endl;
+        fout<<address<<"\n"<<status;
+        fout<<endl;
+        fout.close();
+    }
+    void showdata()
+    {
+        ifstream fin;
+        fin.open("box_user.txt",ios::in);
+        string _name,_phone,_address,_status;
+        fin>>_name>>_phone>>_address>>_status;
+        cout<<"\nNAME: "<<_name<<"\t"<<"PHONE: "<<_phone<<endl;
+        cout<<"ADDRESS: "<<_address<<"\t"<<"BOX STATUS: "<<_status;
+        cout<<endl;
+        fin.close();
+    }
+    void checkbox(int p,int net[]){
+    stack<T>* s = new stack<T>;
+    ofstream fqout;
+    fqout.open("box.txt",ios::app);
+    // cout<<"\nTHE STACK BEFORE PROCESSING\n";
+    fqout<<"\n"<<name;
+    fqout<<"\nTHE STACK BEFORE PROCESSING";
+
+    s->display();
+    for (int i = 0; i < p; i++)
+    {
+        // cout<<"PROCESSING PIN :"<<i+1<<endl;
+        fqout<<" PROCESSING PIN :"<<i+1<<endl;
+
+        if(!s->empty()){
+            // cout<<"STACK IS NOT EMPTY PUSHING PIN :"<<i+1<<" FOR PROCESSING"<<endl;
+            fqout<<" STACK IS NOT EMPTY PUSHING PIN :"<<i+1<<" FOR PROCESSING"<<endl;
+
+            if (net[i] == net[s->peek()]){
+                s->push(i);
+                s->display();
+                // cout<<"SINCE THE PRECEDING PIN IS CONNECTED WITH THE PUSHED PIN THEY FORM A ROUTABLE NET"<<endl;
+                // cout<<"HENCE BOTH ARE POPPED FROM THE PROCESSING STACK\n";
+                fqout<<" SINCE THE PRECEDING PIN IS CONNECTED WITH THE PUSHED PIN THEY FORM A ROUTABLE NET"<<endl;
+                fqout<<" HENCE BOTH ARE POPPED FROM THE PROCESSING STACK\n";
+                s->pop();
+                s->pop();
+            }
+            else{
+                // cout<<"SINCE THE PRECEDING PIN IS NOT CONNECTED WITH THE PUSHED PIN THEY DONT FORM A ROUTABLE NET\nHENCE THE STACK IS UNDISTURBED FOR FUTHER PROCESSING"<<endl;
+                fqout<<" SINCE THE PRECEDING PIN IS NOT CONNECTED WITH THE PUSHED PIN THEY DONT FORM A ROUTABLE NET\n HENCE THE STACK IS UNDISTURBED FOR FUTHER PROCESSING"<<endl;
+                
+                s->push(i);
+                s->display();
+
+            }
+        }
+           
+        else{
+            // cout<<"STACK IS EMPTY PUSHING PIN :"<<i+1<<endl;
+            fqout<<" STACK IS EMPTY PUSHING PIN :"<<i+1<<endl;
+
+            s->push(i);
+            s->display();
+        }
+    }
+
+    if (s->empty())
+    {
+        
+        cout<<"END OF PROCESSING ------------------------------------------------------\n";
+        fqout<<"END OF PROCESSING ------------------------------------------------------\nROUTABLE";
+
+        status="Success";
+        storedata();
+        showdata();
+    }
+    else
+    {
+        cout<<"END OF PROCESSING ------------------------------------------------------\n";
+        fqout<<"END OF PROCESSING ------------------------------------------------------\nNOT ROUTABLE";
+        status="Failed";
+        storedata();
+        showdata();
+    }
+    
+    fqout.close();
+    }
+};
+int main()
+{
+    cout<<"\nEnter the no of Pins in the switchbox......";int p;
+    cin>>p;
+    int* net = new int[p];
+    cout<<"\nENTER THE PINS AND THEIR CONNECTIONS ACCORDINGLY......\n";
+    for(int i=0;i<p;i++)
+    {
+        cout<<"ENTER THE PIN CORRESPONDING TO "<<i+1<<".....";cin>>net[i];
+
+    }
+    sbox<int> b1;
+    b1.setdata();
+    b1.checkbox(p,net);
+
+
+}
