@@ -36,7 +36,7 @@ int main(int argc, char** argv){
                     f.detailedResult();
                     break;
                 case 3:
-                    f.viewAllRecord();
+                    f.viewAllRecordOf(name);
                     break;
 
                 default:
@@ -56,15 +56,25 @@ int main(int argc, char** argv){
 void checkBox(string name, fileHandler& f){
     int n;
     cout<<"Enter the number of pins: ";
-    cin>>n;
-    sbox<int> b1(n);
-    cin>>b1;
-    if(b1.check()==1){
-        cout<<"Routable\n";
-    }
-    else{
-        cout<<"Not Routable\n";
-    }
+    try{
+        cin>>n;
+        if (n%2!=0)
+        {
+            throw (n);
+        }else{
+            sbox<int> b1(n);
+            cin>>b1;
+            if(b1.check()==1){
+                cout<<"Routable\n";
+            }
+            else{
+                cout<<"Not Routable\n";
+            }
 
-    f.addRecord(name, b1);
+            f.addRecord(name, b1);
+        }    
+    }
+    catch(int n){
+        cout<<"Switch box shold have even number of pins\n\n";
+    }
 }

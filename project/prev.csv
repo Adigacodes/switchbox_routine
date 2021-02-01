@@ -1,8 +1,12 @@
-Name,Number_of_Pins,Pins_net,result
-mani,4,1 1 3 3 ,Success
-pranava,4,1 1 3 3 ,Success
-a,2,1 2 ,Failure
+Name,NoOfPins,Pins_net,Result
 adiga,4,1 1 3 3 ,Success
-qwerty,14,1 2 3 4 5 6 6 5 4 3 2 1 15 15 ,Success
-qwerty,14,1 2 3 4 4 3 2 1 9 10 10 9 13 13 ,Success
-22,4,2 3 4 4 ,Failure
+adiga,1,1 ,Failure
+adiga,4,1 1 3 3 ,Success
+pranava,4,1 2 2 1 ,Success
+pranava,6,1 2 2 1 5 5 ,Success
+pranava,1,2 ,Failure
+pranava,5,1 2 3 3 2 ,Failure
+adiga,6,1 2 3 3 2 1 ,Success
+adiga,4,1 1 3 3 ,Success
+adiga,14,1 1 2 2 3 3 4 4 5 5 6 6 7 5 ,Failure
+adiga2,6,1 2 3 3 2 1 ,Success

@@ -46,5 +46,5 @@ class fileHandler{
     public:
         void addRecord(string, sbox<int>&);
         void detailedResult();
-        void viewAllRecord();
+        void viewAllRecordOf(string);
 };

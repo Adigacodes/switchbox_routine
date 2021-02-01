@@ -1,5 +1,7 @@
 #include<iostream>
 #include<fstream>
+#include <vector>
+
 #include "class_declaration.h"
 using namespace std;
 
@@ -94,9 +96,9 @@ int sbox<T>::check(){
 
     for (int i = 0; i < n; i++)
     {
-        fout<<"PROCESSING PIN: "<<i<<endl;
+        fout<<"PROCESSING PIN: "<<i+1<<endl;
         if(!s->empty()){
-            fout<<"STACK IS NOT EMPTY PUSHING PIN: "<<i<<" FOR PROCESSING"<<endl;
+            fout<<"STACK IS NOT EMPTY PUSHING PIN: "<<i+1<<" FOR PROCESSING"<<endl;
             if (net[i] == net[s->top()]){
                 s->push(i);
                 s->display(fout);
@@ -117,7 +119,7 @@ int sbox<T>::check(){
         }
         
         else{
-            fout<<"STACK IS EMPTY PUSHING PIN :"<<i<<endl;
+            fout<<"STACK IS EMPTY PUSHING PIN :"<<i+1<<endl;
             s->push(i);
             s->display(fout);
         }
@@ -161,13 +163,16 @@ istream& operator >>(istream &input, sbox<T> &c)
 // Class 3
 
 void fileHandler::addRecord(string name, sbox<int>& b1){
-        ifstream fin(record, ifstream::in);
-        if (fin.fail())
+        // ifstream fin(record, ifstream::in);
+        ifstream fin;
+        fin.open(record,ios::in);
+
+        if (fin.fail()) 
         {
             ofstream fo;
             fo.open(record,ios::out);
 
-            fo<<"Name,Number_of_Pins,Pins_net,result\n";
+            fo<<"Name,NoOfPins,Pins_net,Result\n";
             fo.close();
         }
         else
@@ -200,14 +205,48 @@ void fileHandler::detailedResult(){
     MyFile.close();
 }
 
-void fileHandler::viewAllRecord(){
+void fileHandler::viewAllRecordOf(string username){
     cout<<"\n\n-------------------------Records-------------------------\n";
+    
     ifstream MyFile(record);
-    string oneLine;
-    while (getline (MyFile, oneLine)) {
-        cout << oneLine;
-        cout<<"\n";
+
+    vector<string> g1; 
+    string line, word, temp; 
+
+    getline(MyFile, line);
+
+    stringstream s(line);
+
+    while(getline(s, word, ',')) { 
+        g1.push_back(word); 
+    } 
+
+    cout<<g1[0]<<"\t"<<g1[1]<<"\t"<<g1[2]<<"\t"<<g1[3]<<"\n";
+
+    bool anyHistory = false;
+
+    while (!MyFile.eof()){ 
+        g1.clear();
+
+        getline(MyFile, line);
+
+        stringstream s(line);
+
+        while(getline(s, word, ',')) { 
+            g1.push_back(word); 
+        } 
+
+        if (g1[0] == username) {
+            anyHistory = true;
+            cout<<g1[0]<<"\t"<<g1[1]<<"\t\t"<<g1[2]<<"\t"<<g1[3]<<endl;
+        }
     }
+
+    if (!anyHistory)
+    {
+        cout<<"\n-------------------------No History-------------------------\n";
+    }
+    
     cout<<endl;
     MyFile.close();
 }
