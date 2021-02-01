@@ -27,9 +27,24 @@ class sbox:public Stack<T>
     private:
         int n;
         T* net;
+        string res;
     public:
         sbox(int k);
         template<class X>
         friend istream& operator>>(istream &input, sbox<X> &c);
+
+        T* get_net();
+        int get_n();
+        string get_result();
         int check();
+};
+
+class fileHandler{
+    private:
+        string box = "box.txt";
+        string record = "prev.csv";
+    public:
+        void addRecord(string, sbox<int>&);
+        void detailedResult();
+        void viewAllRecord();
 };

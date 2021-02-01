@@ -68,6 +68,21 @@ sbox<T>::sbox(int k){
 }
 
 template<class T>
+T* sbox<T>::get_net(){
+    return this->net;
+}
+
+template<class T>
+int sbox<T>::get_n(){
+    return this->n;
+}
+
+template<class T>
+string sbox<T>::get_result(){
+    return this->res;
+}
+
+template<class T>
 int sbox<T>::check(){
     Stack<int>* s = new Stack<int>;
 
@@ -115,6 +130,7 @@ int sbox<T>::check(){
             <<"END OF PROCESSING ------------------------------------------------------"
             <<"\nSWITCHBOX IS ROUTABLE";
         fout.close();
+        res = "Success";
         return 1;
         
     }
@@ -124,6 +140,7 @@ int sbox<T>::check(){
             <<"END OF PROCESSING ------------------------------------------------------"
             <<"\nSWITCHBOX IS NOT ROUTABLE";
         fout.close();
+        res = "Failure";
         return 0;
     }   
 }
@@ -131,9 +148,66 @@ int sbox<T>::check(){
 template<class T>
 istream& operator >>(istream &input, sbox<T> &c)
 {
-    cout<<"enter the nets for pin 1 through "<< c.n <<endl;
-    for (int i = 0; i < c.n; i++){
+    cout<<"\nENTER THE PINS AND THEIR CONNECTIONS ACCORDINGLY\n";
+    for(int i=0;i<c.n;i++)
+    {
+        cout<<"ENTER THE PIN CORRESPONDING TO "<<i+1<<" ";
         input>>c.net[i];
     }
     return input;
+}
+
+
+// Class 3
+
+void fileHandler::addRecord(string name, sbox<int>& b1){
+        ifstream fin(record, ifstream::in);
+        if (fin.fail())
+        {
+            ofstream fo;
+            fo.open(record,ios::out);
+
+            fo<<"Name,Number_of_Pins,Pins_net,result\n";
+            fo.close();
+        }
+        else
+            fin.close();
+        
+        ofstream fo;
+        fo.open(record,ios::app);
+
+        fo<<name<<","<< b1.get_n() << ",";
+
+        int * net = b1.get_net();
+        for (int i = 0; i < b1.get_n(); i++)
+        {
+            fo<<net[i]<<" ";
+        }
+
+        fo<<","<<b1.get_result()<<"\n";
+        fo.close();
+}
+
+void fileHandler::detailedResult(){
+    ifstream MyFile(box);
+    string oneLine;
+    cout<<endl;
+    while (getline (MyFile, oneLine)) {
+        cout << oneLine;
+        cout<<"\n";
+    }
+    cout<<endl;
+    MyFile.close();
+}
+
+void fileHandler::viewAllRecord(){
+    cout<<"\n\n-------------------------Records-------------------------\n";
+    ifstream MyFile(record);
+    string oneLine;
+    while (getline (MyFile, oneLine)) {
+        cout << oneLine;
+        cout<<"\n";
+    }
+    cout<<endl;
+    MyFile.close();
 }
