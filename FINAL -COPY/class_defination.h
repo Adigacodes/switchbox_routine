@@ -103,7 +103,7 @@ void Stack<T>::display(ofstream& fout){
 template<class T>
 sbox<T>::sbox(int k){
     n= k;
-    net = new int[n];
+    net = new T[n];
 }
 
 template<class T>
@@ -198,8 +198,8 @@ istream& operator >>(istream &input, sbox<T> &c)
 
 
 // Class 3
-
-void fileHandler::addRecord(string name, sbox<int>& b1){
+template<class T>
+void fileHandler<T>::addRecord(string name, sbox<T>& b1){
         ifstream fin(record, ifstream::in);
         // ifstream fin;           ANOTHER WAY TO OPEN FILE
         // fin.open(record,ios::in);
@@ -220,7 +220,7 @@ void fileHandler::addRecord(string name, sbox<int>& b1){
 
         fo<<name<<","<< b1.get_n() << ",";
 
-        int * net = b1.get_net();
+        T * net = b1.get_net();
         for (int i = 0; i < b1.get_n(); i++)
         {
             fo<<net[i]<<" ";
@@ -230,7 +230,8 @@ void fileHandler::addRecord(string name, sbox<int>& b1){
         fo.close();
 }
 
-void fileHandler::detailedResult(){
+template<class T>
+void fileHandler<T>::detailedResult(){
     ifstream MyFile(box);
     string oneLine;
     cout<<"\n\n-------------------------PROCESSING DATA------------------\n";
@@ -243,8 +244,24 @@ void fileHandler::detailedResult(){
     MyFile.close();
 }
 
-void fileHandler::viewAllRecordOf(string username){
+template<class T>
+void fileHandler<T>::viewAllRecordOf(string username){
     cout<<"\n\n-------------------------RECORDS-------------------------\n";
+
+     ifstream fin(record, ifstream::in);
+        // ifstream fin;           ANOTHER WAY TO OPEN FILE
+        // fin.open(record,ios::in);
+
+    if (fin.fail()) 
+    {
+        ofstream fo;
+        fo.open(record,ios::out);
+
+        fo<<"NAME ,NO OF PINS ,NET_CONNECTIONS ,STATUS\n";
+        fo.close();
+    }
+    else
+        fin.close();
     
     ifstream MyFile(record);
 

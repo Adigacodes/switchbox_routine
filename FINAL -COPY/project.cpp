@@ -4,14 +4,17 @@
 #include "class_defination.h"
 using namespace std;
 
-void checkBox(string, fileHandler&);
+template<class T>
+void checkBox(string, fileHandler<T>&);
 
 int main(int argc, char** argv){
 
     try {
         if (argc > 1) {
-            fileHandler f;
+            fileHandler<char> fChar;
+            fileHandler<int> fInt;
             int choice;
+            char tp;
             string name = argv[1];
             cout
                 <<"-------------------------WELCOME "<<name<<", TO SWITCH BOX ROUTINE-------------------------\n";
@@ -31,13 +34,37 @@ int main(int argc, char** argv){
                     break;
                 
                 case 1:
-                    checkBox(name, f);
+                    cout<<"\nPress 'c' to use CHAR as convension or press i to use INT: ";
+                    cin>>tp;
+                    if (tp=='c'||tp=='C')
+                    {
+                        checkBox(name, fChar);
+                    }
+                    else
+                    {
+                        checkBox(name, fInt);
+                    }
+                    
                     break;
                 case 2:
-                    f.detailedResult();
+                    if (tp=='c'||tp=='C')
+                    {
+                        fChar.detailedResult();
+                    }
+                    else
+                    {
+                        fInt.detailedResult();
+                    }
                     break;
                 case 3:
-                    f.viewAllRecordOf(name);
+                     if (tp=='c'||tp=='C')
+                    {
+                        fChar.viewAllRecordOf(name);
+                    }
+                    else
+                    {
+                        fInt.viewAllRecordOf(name);
+                    }
                     break;
 
                 default:
@@ -54,7 +81,9 @@ int main(int argc, char** argv){
     }
 }
 
-void checkBox(string name, fileHandler& f){
+
+template<class T>
+void checkBox(string name, fileHandler<T>& f){
     int n;
     cout<<"Enter the number of pins: ";
     try{
@@ -63,13 +92,13 @@ void checkBox(string name, fileHandler& f){
         {
             throw (n);
         }else{
-            sbox<int> b1(n); //MAKING AN OBJECT OF INT TYPE OF SBOX CLASS
+            sbox<T> b1(n); //MAKING AN OBJECT OF INT TYPE OF SBOX CLASS
             cin>>b1;
             if(b1.check()==1){
-                cout<<"ROUTABLE\n";
+                cout<<"ROUTABLE\n\n";
             }
             else{
-                cout<<"NOT ROUTABLE\n";
+                cout<<"NOT ROUTABLE\n\n";
             }
 
             f.addRecord(name, b1);

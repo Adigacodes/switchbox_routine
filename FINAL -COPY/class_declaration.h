@@ -39,12 +39,13 @@ class sbox:public Stack<T>
         int check();
 };
 
+template<class T>
 class fileHandler{
     private:
         string box = "box.txt";
         string record = "prev.csv";
     public:
-        void addRecord(string, sbox<int>&);
+        void addRecord(string, sbox<T>&);
         void detailedResult();
         void viewAllRecordOf(string);
 };
